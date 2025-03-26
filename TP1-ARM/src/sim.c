@@ -59,6 +59,11 @@ void handle_add(uint32_t instruction) {
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
 
+void handle_hlt(uint32_t instruction) {
+    RUN_BIT = 0;
+}
+
+
 void handle_subs_register(uint32_t instruction) {
     uint32_t rd = instruction & 0x1F;
     uint32_t rn = (instruction >> 5) & 0x1F;
@@ -114,6 +119,10 @@ void process_instruction() {
         case 0x648:
             handle_subs_immediate(instruction);
             break;
+        case 0x6a2:
+            handle_hlt(instruction);
+            break;
+
 
 
         default:
