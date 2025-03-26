@@ -1,0 +1,352 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "TP_ACSO.exe"
+		},
+		{
+			"path" : "TP_ACSO.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 12,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 6,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 8,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 9,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 10,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu11 -fdiagnostics-color=always"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include-fixed"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include-fixed/linux"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/TP1-ARM/src"
+				}
+			],
+			"language" : "C",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "11"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				3,
+				4,
+				6,
+				7,
+				27,
+				29
+			]
+		}
+	],
+	"id" : "TP_ACSO::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C"
+	},
+	"name" : "TP_ACSO",
+	"nameOnDisk" : "TP_ACSO.exe",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				3,
+				4,
+				6,
+				7,
+				27,
+				29
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				5,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				28
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/gcov-io.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/gcov-io.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/gcov-iov.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/libgcov-driver-kernel.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/libgcov-driver.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/libgcov-kernel.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/libgcov-merge.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/libgcov-profiler.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/gcov-src/libgcov.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/arm_neon.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/float.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/iso646.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/omp.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stdalign.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stdarg.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stdatomic.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stdbool.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stddef.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stdfix.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stdint-gcc.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stdint.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/stdnoreturn.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/unwind.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include/varargs.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include-fixed/linux/a.out.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include-fixed/limits.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/aarch64-linux-android-4.9/lib/gcc/aarch64-linux-android/4.9/include-fixed/syslimits.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "TP1-ARM/src/shell.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "TP1-ARM/src/shell.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "TP1-ARM/src/sim.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

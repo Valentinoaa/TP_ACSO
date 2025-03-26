@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module classpath="CMake" external.linked.project.id="TP_ACSO" external.linked.project.path="$MODULE_DIR$/TP1-ARM/src" external.root.project.path="$MODULE_DIR$/TP1-ARM/src" external.system.id="Makefile" type="CPP_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Python" name="Python facet">
+      <configuration sdkName="Python 3.12 (TP_ACSO)" />
+    </facet>
+  </component>
+</module>
