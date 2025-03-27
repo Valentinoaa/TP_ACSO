@@ -69,6 +69,19 @@ void handle_add_immediate(uint32_t instruction) {
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
 
+void handle_cmp_register(uint32_t instruction) {
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    uint32_t rm = (instruction >> 16) & 0x1F;
+
+    uint64_t op1 = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t op2 = (rm == 31) ? 0 : CURRENT_STATE.REGS[rm];
+
+    uint64_t result = op1 - op2;
+
+    update_flags(result);
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
 
 void handle_hlt(uint32_t instruction) {
     RUN_BIT = 0;
@@ -121,7 +134,6 @@ void process_instruction() {
             handle_add_immediate(instruction);
             break;
 
-            // ADDS
         case 0x588:
             handle_adds_immediate(instruction);
             break;
