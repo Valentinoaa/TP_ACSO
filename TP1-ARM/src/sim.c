@@ -96,11 +96,15 @@ void handle_subs_register(uint32_t instruction) {
     uint64_t op2 = (rm == 31) ? 0 : CURRENT_STATE.REGS[rm];
     uint64_t result = op1 - op2;
 
-    if (rd != 31) NEXT_STATE.REGS[rd] = result;
-
     update_flags(result);
+
+    if (rd != 31) {
+        NEXT_STATE.REGS[rd] = result;
+    }
+
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
+
 
 void handle_subs_immediate(uint32_t instruction) {
     uint32_t rd = instruction & 0x1F;
