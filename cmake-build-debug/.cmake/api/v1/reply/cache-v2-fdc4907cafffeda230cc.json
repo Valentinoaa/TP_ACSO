@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/cmake-build-debug"
+			"value" : "c:/Users/giner/Documents/MLTPs/TP_ACSO/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -431,7 +431,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "C:/Users/giner/Documents/MLTPs/TP_ACSO/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -503,7 +503,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO"
+			"value" : "C:/Users/giner/Documents/MLTPs/TP_ACSO"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1135,7 +1135,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/cmake-build-debug"
+			"value" : "C:/Users/giner/Documents/MLTPs/TP_ACSO/cmake-build-debug"
 		},
 		{
 			"name" : "TP_ACSO_IS_TOP_LEVEL",
@@ -1159,7 +1159,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO"
+			"value" : "C:/Users/giner/Documents/MLTPs/TP_ACSO"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",

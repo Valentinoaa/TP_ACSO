@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO
+# Install script for directory: C:/Users/giner/Documents/MLTPs/TP_ACSO
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/juanc/OneDrive/Escritorio/udesa/TP_ACSO/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/giner/Documents/MLTPs/TP_ACSO/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
