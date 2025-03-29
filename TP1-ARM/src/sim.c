@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include "shell.h"
 
+void handle_orr_register(uint32_t instruction);
+
 void update_flags(uint64_t result) {
     NEXT_STATE.FLAG_Z = (result == 0);
     NEXT_STATE.FLAG_N = ((int64_t)result < 0);
@@ -134,9 +136,31 @@ void handle_eor_register(uint32_t instruction) {
     uint64_t op2 = (rm == 31) ? 0 : CURRENT_STATE.REGS[rm];
     uint64_t result = op1 ^ op2;
 
-    NEXT_STATE.REGS[rd] = result;
+    if (rd != 31) {
+        NEXT_STATE.REGS[rd] = result;
+    }
+
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
+
+
+void handle_orr_register(uint32_t instruction) {
+    uint32_t rd = instruction & 0x1F;
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    uint32_t rm = (instruction >> 16) & 0x1F;
+
+    uint64_t op1 = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t op2 = (rm == 31) ? 0 : CURRENT_STATE.REGS[rm];
+    uint64_t result = op1 | op2;
+
+    if (rd != 31) {
+        NEXT_STATE.REGS[rd] = result;
+    }
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+
+
 
 
 void process_instruction() {
@@ -146,7 +170,6 @@ void process_instruction() {
     printf("DEBUG: PC=0x%lx, instr=0x%08x, opcode=0x%x\n", CURRENT_STATE.PC, instruction, opcode);
 
     switch(opcode) {
-        // ADD
         case 0x458:
             handle_add_register(instruction);
             break;
@@ -154,20 +177,23 @@ void process_instruction() {
         case 0x450:
             handle_add_immediate(instruction);
             break;
-
+        case 0x550:
+            handle_orr_register(instruction);
+            break;
         case 0x588:
             handle_adds_immediate(instruction);
             break;
         case 0x558:
             handle_adds_register(instruction);
             break;
-
         case 0x6A8:
         case 0x758:
         case 0x688:
             handle_subs_register(instruction);
             break;
         case 0x650:
+            handle_eor_register(instruction);
+            break;
         case 0x648:
         case 0x788:
             handle_subs_immediate(instruction);
