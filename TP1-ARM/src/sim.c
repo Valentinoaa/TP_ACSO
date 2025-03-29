@@ -160,12 +160,158 @@ void handle_orr_register(uint32_t instruction) {
 }
 
 
+void handle_b(uint32_t instruction) {
+    int32_t imm26 = instruction & 0x03FFFFFF;  // bits [25:0]
+    // Sign-extend 26-bit value to 32 bits
+    if (imm26 & 0x02000000) {
+        imm26 |= 0xFC000000; // rellenar con unos si el bit 25 es 1
+    }
+    int64_t offset = ((int64_t)imm26) << 2; // desplazamiento a la izquierda 2 bits
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + offset;
+}
+
+void handle_b_cond(uint32_t instruction) {
+    int32_t imm19 = (instruction >> 5) & 0x7FFFF; // bits [23:5]
+    uint32_t cond = instruction & 0xF;            // bits [3:0]
+
+    if (imm19 & 0x40000) {
+        imm19 |= 0xFFF80000; // Sign-extend si bit 18 es 1
+    }
+
+    int64_t offset = ((int64_t)imm19) << 2;
+
+    int branch = 0;
+    switch (cond) {
+        case 0x0: branch = (CURRENT_STATE.FLAG_Z == 1); break;                         // BEQ
+        case 0x1: branch = (CURRENT_STATE.FLAG_Z == 0); break;                         // BNE
+        case 0xC: branch = (CURRENT_STATE.FLAG_N == CURRENT_STATE.FLAG_Z); break;     // BGE
+        case 0xD: branch = (CURRENT_STATE.FLAG_N != CURRENT_STATE.FLAG_Z); break;     // BLT
+        case 0xE: branch = (CURRENT_STATE.FLAG_Z == 1 || CURRENT_STATE.FLAG_N != CURRENT_STATE.FLAG_Z); break; // BLE
+        case 0xF: branch = (CURRENT_STATE.FLAG_Z == 0 && CURRENT_STATE.FLAG_N == CURRENT_STATE.FLAG_Z); break; // BGT
+    }
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + (branch ? offset : 4);
+}
+
+void handle_lsl_immediate(uint32_t instruction) {
+    uint32_t rd = instruction & 0x1F;           // bits [4:0]
+    uint32_t rn = (instruction >> 5) & 0x1F;    // bits [9:5]
+    uint32_t shamt = (instruction >> 10) & 0x3F; // bits [15:10], shift amount
+
+    uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t result = value << shamt;
+
+    if (rd != 31) {
+        NEXT_STATE.REGS[rd] = result;
+    }
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+
+void handle_lsr_immediate(uint32_t instruction) {
+    uint32_t rd = instruction & 0x1F;
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    uint32_t shamt = (instruction >> 10) & 0x3F;
+
+    uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t result = value >> shamt;
+
+    if (rd != 31) {
+        NEXT_STATE.REGS[rd] = result;
+    }
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+void handle_movz_immediate(uint32_t instruction) {
+    uint32_t rd = instruction & 0x1F;              // bits [4:0]
+    uint32_t imm16 = (instruction >> 5) & 0xFFFF;  // bits [20:5]
+    uint32_t hw = (instruction >> 21) & 0x3;       // bits [22:21]
+
+    if (hw == 0) {
+        uint64_t result = (uint64_t)imm16;  // se ubica en los 16 bits menos significativos
+
+        if (rd != 31) {
+            NEXT_STATE.REGS[rd] = result;
+        }
+    } else {
+        printf("MOVZ con shift != 0 no implementado (hw=%u)\n", hw);
+    }
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+void handle_stur(uint32_t instruction) {
+    uint32_t rt = instruction & 0x1F;             // destino
+    uint32_t rn = (instruction >> 5) & 0x1F;      // base
+    int64_t offset = (instruction >> 12) & 0x1FF; // offset de 9 bits
+
+    // sign-extend si bit 8 es 1 (negativo)
+    if (offset & 0x100) offset |= ~0x1FF;
+
+    uint64_t base = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t value = (rt == 31) ? 0 : CURRENT_STATE.REGS[rt];
+
+    mem_write_32(base + offset, value & 0xFFFFFFFF);
+    mem_write_32(base + offset + 4, (value >> 32) & 0xFFFFFFFF);
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+void handle_sturb(uint32_t instruction) {
+    uint32_t rt = instruction & 0x1F;
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    int64_t offset = (instruction >> 12) & 0x1FF;
+
+    if (offset & 0x100) offset |= ~0x1FF;
+
+    uint64_t base = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint8_t byte = CURRENT_STATE.REGS[rt] & 0xFF;
+
+    // leer palabra actual (4 bytes), sobreescribir solo el byte menos significativo
+    uint32_t current = mem_read_32(base + offset);
+    current = (current & 0xFFFFFF00) | byte;
+    mem_write_32(base + offset, current);
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+void handle_sturh(uint32_t instruction) {
+    uint32_t rt = instruction & 0x1F;
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    int64_t offset = (instruction >> 12) & 0x1FF;
+
+    if (offset & 0x100) offset |= ~0x1FF;
+
+    uint64_t base = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint16_t half = CURRENT_STATE.REGS[rt] & 0xFFFF;
+
+    uint32_t current = mem_read_32(base + offset);
+    current = (current & 0xFFFF0000) | half;
+    mem_write_32(base + offset, current);
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
 
 
 
 void process_instruction() {
     uint32_t instruction = mem_read_32(CURRENT_STATE.PC);
     uint32_t opcode = (instruction >> 21) & 0x7FF;
+
+    // Detectar B (opcode 0b000101 = 0x05)
+    if (((instruction >> 26) & 0x3F) == 0x05) {
+        handle_b(instruction);
+        return;
+    }
+
+    // Detectar B.cond (opcode 0b01010100 = 0x54)
+    if (((instruction >> 24) & 0xFF) == 0x54) {
+        handle_b_cond(instruction);
+        return;
+    }
 
     printf("DEBUG: PC=0x%lx, instr=0x%08x, opcode=0x%x\n", CURRENT_STATE.PC, instruction, opcode);
 
@@ -177,14 +323,18 @@ void process_instruction() {
         case 0x450:
             handle_add_immediate(instruction);
             break;
+        case 0x694:
+            handle_movz_immediate(instruction);
+            break;
+
         case 0x550:
             handle_orr_register(instruction);
             break;
-        case 0x588:
-            handle_adds_immediate(instruction);
-            break;
         case 0x558:
             handle_adds_register(instruction);
+            break;
+        case 0x588:
+            handle_adds_immediate(instruction);
             break;
         case 0x6A8:
         case 0x758:
@@ -194,7 +344,13 @@ void process_instruction() {
         case 0x650:
             handle_eor_register(instruction);
             break;
-        case 0x648:
+        case 0x69B: // LSL (immediate)
+            handle_lsl_immediate(instruction);
+            break;
+        case 0x69A: // LSR (immediate)
+            handle_lsr_immediate(instruction);
+            break;
+
         case 0x788:
             handle_subs_immediate(instruction);
             break;
@@ -203,6 +359,15 @@ void process_instruction() {
             break;
         case 0x750:
             handle_ands_register(instruction);
+            break;
+        case 0x7C2:
+            handle_stur(instruction);
+            break;
+        case 0x1C0:
+            handle_sturb(instruction);
+            break;
+        case 0x5C0:
+            handle_sturh(instruction);
             break;
 
         default:
