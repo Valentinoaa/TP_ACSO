@@ -217,13 +217,18 @@ void handle_lsl_immediate(uint32_t instruction) {
 
 
 void handle_lsr_immediate(uint32_t instruction) {
-    uint32_t rd = instruction & 0x1F;
-    uint32_t rn = (instruction >> 5) & 0x1F;
-    uint32_t shamt = (instruction >> 10) & 0x3F;
+    uint32_t rd = instruction & 0x1F;           // bits [4:0]
+    uint32_t rn = (instruction >> 5) & 0x1F;    // bits [9:5]
+    uint32_t immr = (instruction >> 16) & 0x3F; // bits [21:16]
+    uint32_t imms = (instruction >> 10) & 0x3F; // bits [15:10]
+
+    uint32_t shamt = (64 - immr) & 0x3F;
 
     uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
-    uint64_t result = value >> shamt;
 
+    printf("DEBUG: immr=%u, imms=%u, shamt=%u\n", immr, imms, shamt);
+
+    uint64_t result = value >> shamt;
 
     if (rd != 31) {
         NEXT_STATE.REGS[rd] = result;
@@ -231,7 +236,6 @@ void handle_lsr_immediate(uint32_t instruction) {
 
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
-
 void handle_movz_immediate(uint32_t instruction) {
     uint32_t rd     =  instruction        & 0x1F;
     uint32_t imm16  = (instruction >> 5)  & 0xFFFF;
@@ -477,11 +481,12 @@ void process_instruction() {
             handle_eor_register(instruction);
             break;
         case 0x69B:
-            printf("LSL (immediate)\n");
             handle_lsl_immediate(instruction);
+            printf("LSL\n");
             break;
         case 0x69A:
             handle_lsr_immediate(instruction);
+            printf("LSR\n");
             break;
 
         case 0x788:
