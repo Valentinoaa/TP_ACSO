@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include "shell.h"
 
-void handle_orr_register(uint32_t instruction);
 
 void update_flags(uint64_t result) {
     NEXT_STATE.FLAG_Z = (result == 0);
@@ -226,27 +225,11 @@ void handle_lsr_immediate(uint32_t instruction) {
 }
 
 void handle_movz_immediate(uint32_t instruction) {
-    uint32_t rd = instruction & 0x1F;
-    uint32_t imm16 = (instruction >> 5) & 0xFFFF;  // bits [20:5]
-    uint32_t hw    = (instruction >> 21) & 0x3;    // bits [22:21]
+    uint32_t rd     =  instruction        & 0x1F;
+    uint32_t imm16  = (instruction >> 5)  & 0xFFFF;
+    uint32_t hw     = (instruction >> 21) & 0x3;
 
-    // MOVZ Xd, imm16, LSL (16 * hw)
-    //  => Xd = (imm16 << (16*hw))
-    uint64_t result = 0;
-    switch(hw) {
-        case 0:
-            result = (uint64_t)imm16;
-            break;
-        case 1:
-            result = ((uint64_t)imm16) << 16;
-            break;
-        case 2:
-            result = ((uint64_t)imm16) << 32;
-            break;
-        case 3:
-            result = ((uint64_t)imm16) << 48;
-            break;
-    }
+    uint64_t result = ((uint64_t)imm16) << (16 * hw);
 
     if (rd != 31) {
         NEXT_STATE.REGS[rd] = result;
@@ -281,15 +264,24 @@ void handle_sturb(uint32_t instruction) {
     if (offset & 0x100) offset |= ~0x1FF;
 
     uint64_t base = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t address = base + offset;
+
     uint8_t byte = CURRENT_STATE.REGS[rt] & 0xFF;
 
-    // leer palabra actual (4 bytes), sobreescribir solo el byte menos significativo
-    uint32_t current = mem_read_32(base + offset);
-    current = (current & 0xFFFFFF00) | byte;
-    mem_write_32(base + offset, current);
+    // Alinear la dirección al word de 4 bytes
+    uint64_t aligned_addr = address & ~0x3;
+    uint32_t word = mem_read_32(aligned_addr);
+
+    // Calcular en qué byte dentro del word escribir
+    int byte_shift = (address & 0x3) * 8;
+
+    // Reemplazar solo ese byte
+    word = (word & ~(0xFF << byte_shift)) | (byte << byte_shift);
+    mem_write_32(aligned_addr, word);
 
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
+
 
 void handle_sturh(uint32_t instruction) {
     uint32_t rt = instruction & 0x1F;
@@ -379,6 +371,13 @@ void process_instruction() {
         return;
     }
 
+    if (((instruction >> 23) & 0x1FF) == 0x1A4) {
+        handle_movz_immediate(instruction);
+        return;
+    }
+
+
+
     printf("DEBUG: PC=0x%lx, instr=0x%08x, opcode=0x%x\n", CURRENT_STATE.PC, instruction, opcode);
 
     switch(opcode) {
@@ -392,7 +391,6 @@ void process_instruction() {
         case 0x694:
             handle_movz_immediate(instruction);
             break;
-
         case 0x550:
             handle_orr_register(instruction);
             break;
@@ -420,15 +418,19 @@ void process_instruction() {
         case 0x788:
             handle_subs_immediate(instruction);
             break;
+
         case 0x6a2:
             handle_hlt(instruction);
             break;
+
         case 0x750:
             handle_ands_register(instruction);
             break;
+
         case 0x7C0: // STUR X
             handle_stur(instruction);
             break;
+
         case 0x7C2: // LDUR X
             handle_ldur(instruction);
             break;
