@@ -60,11 +60,11 @@ movz X0, 999           // no se debería ejecutar
 salto1:
 add X28, X1, X2         // debería ejecutarse
 
-b salto2
-movz X0, 888           // no se ejecuta
-
-
-salto2:
+// BR
+movz X29, salto2_offset
+b salto2_real
+movz X0, 888
+salto2_real:
 add X30, X1, X1         // X30 = 10 + 10
 
 // CBZ y CBNZ
@@ -105,6 +105,9 @@ cmp X1, X2              // 10 <= 20
 ble menor_igual
 movz X0, 888            // no se ejecuta
 menor_igual:
+
+salto2_offset:
+add X30, X1, X1
 
 // HLT
 hlt 0
