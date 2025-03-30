@@ -60,10 +60,9 @@ movz X0, 999           // no se debería ejecutar
 salto1:
 add X28, X1, X2         // debería ejecutarse
 
-// BR
-adr X29, salto2         // usar adr para guardar la dirección
-br X29
-movz X0, 888           // tampoco se ejecuta
+b salto2
+movz X0, 888           // no se ejecuta
+
 
 salto2:
 add X30, X1, X1         // X30 = 10 + 10

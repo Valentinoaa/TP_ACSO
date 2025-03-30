@@ -382,27 +382,70 @@ void handle_mul(uint32_t instruction) {
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
 
+void handle_cbz(uint32_t instruction) {
+    uint32_t rn = instruction & 0x1F;
+    int32_t imm19 = (instruction >> 5) & 0x7FFFF;
 
+    if (imm19 & (1 << 18)) {
+        imm19 |= ~0x7FFFF;
+    }
+
+    int64_t offset = ((int64_t)imm19) << 2;
+
+    uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    if (value == 0) {
+        NEXT_STATE.PC = CURRENT_STATE.PC + offset;
+    } else {
+        NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+    }
+}
+
+void handle_cbnz(uint32_t instruction) {
+    uint32_t rn = instruction & 0x1F;
+    int32_t imm19 = (instruction >> 5) & 0x7FFFF;
+
+    if (imm19 & (1 << 18)) {
+        imm19 |= ~0x7FFFF;
+    }
+
+    int64_t offset = ((int64_t)imm19) << 2;
+
+    uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    if (value != 0) {
+        NEXT_STATE.PC = CURRENT_STATE.PC + offset;
+    } else {
+        NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+    }
+}
 
 
 
 void process_instruction() {
     uint32_t instruction = mem_read_32(CURRENT_STATE.PC);
-    uint32_t opcode = (instruction >> 21) & 0x7FF;
+    uint32_t opcode = (instruction >> 21);
 
-    // Detectar B (opcode 0b000101 = 0x05)
     if (((instruction >> 26) & 0x3F) == 0x05) {
         handle_b(instruction);
         return;
     }
 
-    // Detectar B.cond (opcode 0b01010100 = 0x54)
     if (((instruction >> 24) & 0xFF) == 0x54) {
         handle_b_cond(instruction);
         return;
     }
 
+    if (((instruction >> 24) & 0xFF) == 0xB4) {
+        handle_cbz(instruction);
+        return;
+    }
+
+    if (((instruction >> 24) & 0xFF) == 0xB5) {
+        handle_cbnz(instruction);
+        return;
+    }
+
     printf("DEBUG: PC=0x%lx, instr=0x%08x, opcode=0x%x\n", CURRENT_STATE.PC, instruction, opcode);
+
 
     switch(opcode) {
         case 0x458:
@@ -482,7 +525,6 @@ void process_instruction() {
         case 0x4d8:
             handle_mul(instruction);
             break;
-
 
         default:
             printf("Instrucción no implementada: opcode 0x%x\n", opcode);
