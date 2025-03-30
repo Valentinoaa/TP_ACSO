@@ -226,22 +226,35 @@ void handle_lsr_immediate(uint32_t instruction) {
 }
 
 void handle_movz_immediate(uint32_t instruction) {
-    uint32_t rd = instruction & 0x1F;              // bits [4:0]
+    uint32_t rd = instruction & 0x1F;
     uint32_t imm16 = (instruction >> 5) & 0xFFFF;  // bits [20:5]
-    uint32_t hw = (instruction >> 21) & 0x3;       // bits [22:21]
+    uint32_t hw    = (instruction >> 21) & 0x3;    // bits [22:21]
 
-    if (hw == 0) {
-        uint64_t result = (uint64_t)imm16;  // se ubica en los 16 bits menos significativos
+    // MOVZ Xd, imm16, LSL (16 * hw)
+    //  => Xd = (imm16 << (16*hw))
+    uint64_t result = 0;
+    switch(hw) {
+        case 0:
+            result = (uint64_t)imm16;
+            break;
+        case 1:
+            result = ((uint64_t)imm16) << 16;
+            break;
+        case 2:
+            result = ((uint64_t)imm16) << 32;
+            break;
+        case 3:
+            result = ((uint64_t)imm16) << 48;
+            break;
+    }
 
-        if (rd != 31) {
-            NEXT_STATE.REGS[rd] = result;
-        }
-    } else {
-        printf("MOVZ con shift != 0 no implementado (hw=%u)\n", hw);
+    if (rd != 31) {
+        NEXT_STATE.REGS[rd] = result;
     }
 
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
+
 
 void handle_stur(uint32_t instruction) {
     uint32_t rt = instruction & 0x1F;             // destino
@@ -294,6 +307,59 @@ void handle_sturh(uint32_t instruction) {
 
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
+
+void handle_ldur(uint32_t instruction) {
+    uint32_t rt = instruction & 0x1F;
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    int64_t offset = (instruction >> 12) & 0x1FF;
+    if (offset & 0x100) offset |= ~0x1FF;
+
+    uint64_t base = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t address = base + offset;
+
+    uint32_t lower = mem_read_32(address);
+    uint32_t upper = mem_read_32(address + 4);
+    uint64_t value = ((uint64_t)upper << 32) | lower;
+
+    if (rt != 31) NEXT_STATE.REGS[rt] = value;
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+void handle_ldurb(uint32_t instruction) {
+    uint32_t rt = instruction & 0x1F;
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    int64_t offset = (instruction >> 12) & 0x1FF;
+    if (offset & 0x100) offset |= ~0x1FF;
+
+    uint64_t base = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t address = base + offset;
+
+    uint32_t word = mem_read_32(address);
+    uint8_t byte = word & 0xFF;
+
+    if (rt != 31) NEXT_STATE.REGS[rt] = (uint64_t)byte;
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+void handle_ldurh(uint32_t instruction) {
+    uint32_t rt = instruction & 0x1F;
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    int64_t offset = (instruction >> 12) & 0x1FF;
+    if (offset & 0x100) offset |= ~0x1FF;
+
+    uint64_t base = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t address = base + offset;
+
+    uint32_t word = mem_read_32(address);
+    uint16_t half = word & 0xFFFF;
+
+    if (rt != 31) NEXT_STATE.REGS[rt] = (uint64_t)half;
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
 
 
 
@@ -360,15 +426,27 @@ void process_instruction() {
         case 0x750:
             handle_ands_register(instruction);
             break;
-        case 0x7C2:
+        case 0x7C0: // STUR X
             handle_stur(instruction);
             break;
-        case 0x1C0:
+        case 0x7C2: // LDUR X
+            handle_ldur(instruction);
+            break;
+
+        case 0x1C0: // STURB W
             handle_sturb(instruction);
             break;
-        case 0x5C0:
+        case 0x1C2: // LDURB W
+            handle_ldurb(instruction);
+            break;
+
+        case 0x3C0: // STURH W
             handle_sturh(instruction);
             break;
+        case 0x3C2: // LDURH W
+            handle_ldurh(instruction);
+            break;
+
 
         default:
             printf("Instrucción no implementada: opcode 0x%x\n", opcode);
