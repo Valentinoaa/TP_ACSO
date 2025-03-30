@@ -17,12 +17,12 @@ movz X12, 120
 // ADD y ADDS
 adds X13, X1, X2       // X13 = 10 + 20
 adds X14, X3, 3        // X14 = 30 + 3
-adds X15, X3, 3, LSL #12 // shift == 01: 3 << 12 = 12288, X15 = 30 + 12288
+// adds X15, X3, 3, LSL #12 // shift == 01: 3 << 12 = 12288, X15 = 30 + 12288
 
 // SUB y SUBS
 subs X16, X5, X1       // X16 = 50 - 10
 subs X17, X6, 5        // X17 = 60 - 5
-subs X18, X6, 5, LSL #12 // shift == 01: 5 << 12 = 20480
+// subs X18, X6, 5, LSL #12 // shift == 01: 5 << 12 = 20480
 
 // CMP
 cmp X1, X2             // 10 - 20
