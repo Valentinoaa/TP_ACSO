@@ -360,6 +360,12 @@ void handle_ldurh(uint32_t instruction) {
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
 
+void handle_br(uint32_t instruction) {
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    uint64_t address = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    NEXT_STATE.PC = address;
+}
+
 
 
 
@@ -386,6 +392,7 @@ void process_instruction() {
             handle_add_register(instruction);
             break;
         case 0x448:
+        case 0x488:
         case 0x450:
             handle_add_immediate(instruction);
             break;
@@ -449,6 +456,10 @@ void process_instruction() {
             break;
         case 0x3C2: // LDURH W
             handle_ldurh(instruction);
+            break;
+
+        case 0x6B0: // BR
+            handle_br(instruction);
             break;
 
 
