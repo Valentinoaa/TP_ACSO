@@ -17,12 +17,10 @@ movz X12, 120
 // ADD y ADDS
 adds X13, X1, X2       // X13 = 10 + 20
 adds X14, X3, 3        // X14 = 30 + 3
-// adds X15, X3, 3, LSL #12 // shift == 01: 3 << 12 = 12288, X15 = 30 + 12288
 
 // SUB y SUBS
 subs X16, X5, X1       // X16 = 50 - 10
 subs X17, X6, 5        // X17 = 60 - 5
-// subs X18, X6, 5, LSL #12 // shift == 01: 5 << 12 = 20480
 
 // CMP
 cmp X1, X2             // 10 - 20
@@ -49,9 +47,11 @@ ldurb W25, [X10, #0x20]  // carga en W25
 sturh W1, [X10, #0x28]   // guarda W1(15:0)
 ldurh W26, [X10, #0x28]  // carga 16 bits en W26
 
-
 // MUL
 mul X27, X1, X2         // 10 * 20
+
+hlt 0
+
 
 // B (salto incondicional)
 b salto1
@@ -59,11 +59,16 @@ movz X0, 999           // no se debería ejecutar
 
 salto1:
 add X28, X1, X2         // debería ejecutarse
-
 // BR
 movz X29, salto2_offset
 b salto2_real
 movz X0, 888
+
+salto2_offset:
+add X30, X1, X1
+// HLT
+hlt 0
+
 salto2_real:
 add X30, X1, X1         // X30 = 10 + 10
 
@@ -104,10 +109,6 @@ mayor_igual:
 cmp X1, X2              // 10 <= 20
 ble menor_igual
 movz X0, 888            // no se ejecuta
+
 menor_igual:
-
-salto2_offset:
-add X30, X1, X1
-
-// HLT
 hlt 0

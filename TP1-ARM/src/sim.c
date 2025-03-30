@@ -204,8 +204,6 @@ void handle_lsl_immediate(uint32_t instruction) {
 
     uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
 
-    printf("DEBUG: immr=%u, imms=%u, shamt=%u\n", immr, imms, shamt);
-
     uint64_t result = value << shamt;
 
     if (rd != 31) {
@@ -222,13 +220,11 @@ void handle_lsr_immediate(uint32_t instruction) {
     uint32_t immr = (instruction >> 16) & 0x3F; // bits [21:16]
     uint32_t imms = (instruction >> 10) & 0x3F; // bits [15:10]
 
-    uint32_t shamt = (64 - immr) & 0x3F;
+    // Este caso es válido solo si imms == 63
+    if (imms != 63) return;
 
     uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
-
-    printf("DEBUG: immr=%u, imms=%u, shamt=%u\n", immr, imms, shamt);
-
-    uint64_t result = value >> shamt;
+    uint64_t result = value >> immr;
 
     if (rd != 31) {
         NEXT_STATE.REGS[rd] = result;
@@ -236,6 +232,8 @@ void handle_lsr_immediate(uint32_t instruction) {
 
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
+
+
 void handle_movz_immediate(uint32_t instruction) {
     uint32_t rd     =  instruction        & 0x1F;
     uint32_t imm16  = (instruction >> 5)  & 0xFFFF;
@@ -449,19 +447,13 @@ void process_instruction() {
     }
 
     if (((instruction >> 22) ) == 0x34d) {
-        int32_t imms = (instruction >> 10) & 0x3F;
-        if (imms == 0x1F) {
+        uint32_t imms = (instruction >> 10) & 0x3F;
+        if (imms == 0x3F)
             handle_lsr_immediate(instruction);
-            return;
-        } else {
+        else
             handle_lsl_immediate(instruction);
-            return;
-        }
-
+        return;
     }
-
-    printf("DEBUG: PC=0x%lx, instr=0x%08x, opcode=0x%x\n", CURRENT_STATE.PC, instruction, opcode);
-
 
     switch(opcode) {
         case 0x458:
@@ -491,14 +483,6 @@ void process_instruction() {
             break;
         case 0x650:
             handle_eor_register(instruction);
-            break;
-        case 0x69B:
-            handle_lsl_immediate(instruction);
-            printf("LSL\n");
-            break;
-        case 0x69A:
-            handle_lsr_immediate(instruction);
-            printf("LSR\n");
             break;
 
         case 0x788:
