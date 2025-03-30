@@ -196,9 +196,16 @@ void handle_b_cond(uint32_t instruction) {
 void handle_lsl_immediate(uint32_t instruction) {
     uint32_t rd = instruction & 0x1F;           // bits [4:0]
     uint32_t rn = (instruction >> 5) & 0x1F;    // bits [9:5]
-    uint32_t shamt = (instruction >> 10) & 0x3F; // bits [15:10], shift amount
+    uint32_t immr = (instruction >> 16) & 0x3F; // bits [21:16]
+    uint32_t imms = (instruction >> 10) & 0x3F; // bits [15:10]
+
+    // LSL: shamt = (64 - immr) & 0x3F
+    uint32_t shamt = (64 - immr) & 0x3F;
 
     uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+
+    printf("DEBUG: immr=%u, imms=%u, shamt=%u\n", immr, imms, shamt);
+
     uint64_t result = value << shamt;
 
     if (rd != 31) {
@@ -216,6 +223,7 @@ void handle_lsr_immediate(uint32_t instruction) {
 
     uint64_t value = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
     uint64_t result = value >> shamt;
+
 
     if (rd != 31) {
         NEXT_STATE.REGS[rd] = result;
@@ -371,13 +379,6 @@ void process_instruction() {
         return;
     }
 
-    if (((instruction >> 23) & 0x1FF) == 0x1A4) {
-        handle_movz_immediate(instruction);
-        return;
-    }
-
-
-
     printf("DEBUG: PC=0x%lx, instr=0x%08x, opcode=0x%x\n", CURRENT_STATE.PC, instruction, opcode);
 
     switch(opcode) {
@@ -388,7 +389,7 @@ void process_instruction() {
         case 0x450:
             handle_add_immediate(instruction);
             break;
-        case 0x694:
+        case 0x694: // MOVZ
             handle_movz_immediate(instruction);
             break;
         case 0x550:
@@ -409,6 +410,7 @@ void process_instruction() {
             handle_eor_register(instruction);
             break;
         case 0x69B: // LSL (immediate)
+            printf("LSL (immediate)\n");
             handle_lsl_immediate(instruction);
             break;
         case 0x69A: // LSR (immediate)
