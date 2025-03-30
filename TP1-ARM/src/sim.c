@@ -428,24 +428,36 @@ void process_instruction() {
     uint32_t instruction = mem_read_32(CURRENT_STATE.PC);
     uint32_t opcode = (instruction >> 21);
 
-    if (((instruction >> 26) & 0x3F) == 0x05) {
+    if (((instruction >> 26)) == 0x05) {
         handle_b(instruction);
         return;
     }
 
-    if (((instruction >> 24) & 0xFF) == 0x54) {
+    if (((instruction >> 24) ) == 0x54) {
         handle_b_cond(instruction);
         return;
     }
 
-    if (((instruction >> 24) & 0xFF) == 0xB4) {
+    if (((instruction >> 24)) == 0xB4) {
         handle_cbz(instruction);
         return;
     }
 
-    if (((instruction >> 24) & 0xFF) == 0xB5) {
+    if (((instruction >> 24)) == 0xB5) {
         handle_cbnz(instruction);
         return;
+    }
+
+    if (((instruction >> 22) ) == 0x34d) {
+        int32_t imms = (instruction >> 10) & 0x3F;
+        if (imms == 0x1F) {
+            handle_lsr_immediate(instruction);
+            return;
+        } else {
+            handle_lsl_immediate(instruction);
+            return;
+        }
+
     }
 
     printf("DEBUG: PC=0x%lx, instr=0x%08x, opcode=0x%x\n", CURRENT_STATE.PC, instruction, opcode);
