@@ -360,6 +360,29 @@ void handle_ldurh(uint32_t instruction) {
     NEXT_STATE.PC = CURRENT_STATE.PC + 4;
 }
 
+void handle_br(uint32_t instruction) {
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    uint64_t address = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    NEXT_STATE.PC = address;
+}
+
+void handle_mul(uint32_t instruction) {
+    uint32_t rd = instruction & 0x1F;
+    uint32_t rn = (instruction >> 5) & 0x1F;
+    uint32_t rm = (instruction >> 16) & 0x1F;
+
+    uint64_t op1 = (rn == 31) ? 0 : CURRENT_STATE.REGS[rn];
+    uint64_t op2 = (rm == 31) ? 0 : CURRENT_STATE.REGS[rm];
+    uint64_t result = op1 * op2;
+
+    if (rd != 31) {
+        NEXT_STATE.REGS[rd] = result;
+    }
+
+    NEXT_STATE.PC = CURRENT_STATE.PC + 4;
+}
+
+
 
 
 
@@ -386,10 +409,11 @@ void process_instruction() {
             handle_add_register(instruction);
             break;
         case 0x448:
+        case 0x488:
         case 0x450:
             handle_add_immediate(instruction);
             break;
-        case 0x694: // MOVZ
+        case 0x694:
             handle_movz_immediate(instruction);
             break;
         case 0x550:
@@ -409,11 +433,11 @@ void process_instruction() {
         case 0x650:
             handle_eor_register(instruction);
             break;
-        case 0x69B: // LSL (immediate)
+        case 0x69B:
             printf("LSL (immediate)\n");
             handle_lsl_immediate(instruction);
             break;
-        case 0x69A: // LSR (immediate)
+        case 0x69A:
             handle_lsr_immediate(instruction);
             break;
 
@@ -429,26 +453,34 @@ void process_instruction() {
             handle_ands_register(instruction);
             break;
 
-        case 0x7C0: // STUR X
+        case 0x7C0:
             handle_stur(instruction);
             break;
 
-        case 0x7C2: // LDUR X
+        case 0x7C2:
             handle_ldur(instruction);
             break;
 
-        case 0x1C0: // STURB W
+        case 0x1C0:
             handle_sturb(instruction);
             break;
-        case 0x1C2: // LDURB W
+        case 0x1C2:
             handle_ldurb(instruction);
             break;
 
-        case 0x3C0: // STURH W
+        case 0x3C0:
             handle_sturh(instruction);
             break;
-        case 0x3C2: // LDURH W
+        case 0x3C2:
             handle_ldurh(instruction);
+            break;
+
+        case 0x6B0:
+            handle_br(instruction);
+            break;
+
+        case 0x4d8:
+            handle_mul(instruction);
             break;
 
 
