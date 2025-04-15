@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import os
+import argparse
+import subprocess
+
+parser = argparse.ArgumentParser()
+parser.add_argument("fasm", metavar="input.s", help="The ARM assembly file (ASCII)")
+args = parser.parse_args()
+
+curpwd = os.getcwd()
+ftmp = "tmp.out"
+fasm = args.fasm
+fhex = os.path.splitext(fasm)[0] + ".x"
+
+armas = os.path.join(os.path.dirname(__file__), '..', 'aarch64-linux-android-4.9', 'bin', 'aarch64-linux-android-as')
+subprocess.run([armas, fasm, "-o", ftmp], check=True)
+
+armobjdump = os.path.join(os.path.dirname(__file__), '..', 'aarch64-linux-android-4.9', 'bin', 'aarch64-linux-android-objdump')
+with open(fhex, "w", encoding="utf-8") as fstdout:
+    subprocess.run([armobjdump, "-d", ftmp], stdout=fstdout, check=True)
+
+bytecode_lines = []
+with open(fhex, encoding="utf-8") as f:
+    for line in f:
+        parts = line.split('\t')  # Split on tab characters
+        if len(parts) > 1 and parts[0].strip().endswith(":"):
+            bytecode = parts[1].strip()
+            bytecode_lines.append(bytecode)
+
+with open(fhex, "w", encoding="utf-8") as f:
+    f.write("\n".join(bytecode_lines))
+
+os.unlink(ftmp)
