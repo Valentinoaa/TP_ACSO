@@ -1,0 +1,27 @@
+Valentino Arbelaiz
+varbelaizalberti@udesa.edu.ar
+
+<phase_1>
+El código compara el input del usuario con una string fija usando la función strings_not_equal. Usando GDB y examinando la dirección pasada como segundo parámetro, descubrimos que la frase esperada era:
+Breakpoint 3, 0x000000000040231e in strings_not_equal ()
+(gdb) x/s $rsi
+0x4c9a60:       "Cada uno es como Dios le hizo, y aun peor muchas veces."
+
+
+<phase_2>
+La etapa 2 utiliza dos llamadas a __strtol para convertir cadenas a números enteros (A y B). Luego se computa X = A + B - 32. Se llama a una función misterio con los siguientes argumentos:
+RDI = X
+RSI = A
+RDX = B
+En la función misterio se cuentan los bits en 1 de X. Debe haber exactamente 11. Luego se comprueba que (A XOR B) sea negativo (que tenga el bit de signo encendido).-90 2169
+
+<phase_3>
+Esta fase realizaba una búsqueda binaria recursiva sobre un arreglo de palabras cargadas desde palabras.txt. Cada vez que se visitaba un índice, se acumulaba el valor ASCII del primer carácter de esa palabra. El programa esperaba una palabra y el valor acumulado esperado. Mediante un script en Python (phase_3.py), se simuló esta lógica y se encontró un par válido:
+luir 749
+
+<phase_4>
+Esta fase toma una cadena de 6 caracteres y la convierte usando una tabla de sustitución (array.0). Luego la cadena resultante es comparada con la palabra "depila".
+Para resolverla hicimos un script que invierte el mapeo de la tabla y genera el input correcto.
+Esta fase toma una cadena de 6 caracteres y la convierte usando una tabla de sustitución (array.0). Luego la cadena resultante es comparada con la palabra "depila".
+Para resolverla hicimos un script que invierte el mapeo de la tabla y genera el input correcto.
+l096o5
