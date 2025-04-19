@@ -1,0 +1,35 @@
+Valentino Arbelaiz
+varbelaizalberti@udesa.edu.ar
+
+<phase_1>
+El código compara el input del usuario con una string fija usando la función strings_not_equal. Usando GDB la frase esperada era:
+Breakpoint 3, 0x000000000040231e in strings_not_equal ()
+(gdb) x/s $rsi
+0x4c9a60:       "Cada uno es como Dios le hizo, y aun peor muchas veces."
+
+
+<phase_2>
+La etapa 2 utiliza dos llamadas a __strtol para convertir cadenas a números enteros (A y B). Luego se computa X = A + B - 32. Se llama a una función misterio con los siguientes argumentos:
+RDI = X
+RSI = A
+RDX = B
+En la función misterio se cuentan los bits en 1 de X. Tiene que haber exactamente 11. Luego se comprueba que (A XOR B) sea negativo
+-1000 3079
+
+<phase_3>
+Esta fase realizaba una búsqueda binaria recursiva sobre un arreglo de palabras cargadas desde palabras.txt. Cada vez que se visitaba un índice, se acumulaba el valor asci del primer carácter de esa palabra. El programa espara una palabra y el valor acumulado esperado. Con un script en Python (phase_3.py) se simuló esta lógica y se encontró el par:
+luir 749
+
+<phase_4>
+Esta fase toma 6 caracteres y la convierte usando una tabla de sustitucion. Despues la cadena resultante es comparada con la palabra "depila".
+Se resolvió con un script que invierte el mapeo de la tabla y genera el input correcto.
+(gdb) break *0x402168
+(gdb) x/s 0x4c7153
+0x4c7153: "%s"
+(gdb) x/s 0x4c709f
+0x4c709f: "depila"
+(gdb) x/16xb 0x4cde20
+0x4cde20 <array.0>: 0x65 0x67 0x6d 0x63 0x66 0x61 0x69 0x6a
+0x4cde28 <array.0+8>: 0x6f 0x70 0x6e 0x68 0x64 0x62 0x6b 0x6c
+
+l096o5

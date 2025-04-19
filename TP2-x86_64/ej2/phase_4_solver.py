@@ -1,26 +1,17 @@
-# Python script completo para resolver la Fase 4 (invertir la tabla y generar el input)
 
 def generar_input_phase4(expected: str) -> str:
-    """
-    Dada la cadena esperada 'expected' (6 caracteres), 
-    invierte la tabla nibble→carácter y calcula 
-    el input de 6 bytes que produce esa salida.
-    """
-    # Tabla de 16 bytes (array.0) obtenida de GDB
+
     table = [
         0x65, 0x67, 0x6d, 0x63,
         0x66, 0x61, 0x69, 0x6a,
         0x6f, 0x70, 0x6e, 0x68,
         0x64, 0x62, 0x6b, 0x6c
     ]
-    # Construir diccionario invertido: carácter→nibble
     inv_map = {chr(b): i for i, b in enumerate(table)}
 
-    # Armar el input de 6 caracteres
     result = ""
     for ch in expected:
-        if ch not in inv_map:
-            raise ValueError(f"Carácter '{ch}' no está en la tabla de mapeo.")
+
         nibble = inv_map[ch]
         # Si nibble < 10 → dígito '0'+nibble; si ≥10 → letra '`'+nibble
         if nibble < 10:
