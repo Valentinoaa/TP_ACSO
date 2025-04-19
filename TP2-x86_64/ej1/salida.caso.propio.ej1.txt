@@ -1,0 +1,81 @@
+== Ejercicio 1a ==
+
+Creando lista vacia
+
+======================== Libera memoria =======================
+
+Creando nodo vacio
+
+======================== Libera memoria =======================
+
+Creando lista vacia
+
+List length: 0
+
+Agregando estrellas:
+
+List length: 12
+	node hash: sol | type: 7
+	node hash: polaris | type: 6
+	node hash: rigel | type: 1
+	node hash: pollux | type: 3
+	node hash: deneb | type: 1
+	node hash: adhara | type: 7
+	node hash: betelgeuse | type: 2
+	node hash: sirio | type: 4
+	node hash: procyon | type: 1
+	node hash: altair | type: 5
+	node hash: achenar | type: 2
+	node hash: fomalhaut | type: 3
+
+======================== Libera memoria =======================
+
+Creando lista vacia
+
+Agregando constelaciones y misiones:
+
+List length: 28
+	node hash: geminis | type: 2
+	node hash: pisis | type: 3
+	node hash: cefeo | type: 3
+	node hash: pavo | type: 6
+	node hash: libra | type: 4
+	node hash: auriga | type: 2
+	node hash: sagitario | type: 4
+	node hash: pavo | type: 0
+	node hash: crux | type: 3
+	node hash: cisne | type: 0
+	node hash: orion | type: 7
+	node hash: centauro | type: 5
+	node hash: juno | type: 6
+	node hash: hubble | type: 2
+	node hash: irazusta | type: 6
+	node hash: terra | type: 3
+	node hash: cassini-huygens | type: 3
+	node hash: artemis | type: 7
+	node hash: columbia | type: 1
+	node hash: kepler | type: 2
+	node hash: aqua | type: 6
+	node hash: sputnik | type: 2
+	node hash: insight | type: 5
+	node hash: messenger | type: 7
+	node hash: osiris | type: 1
+	node hash: rex | type: 0
+	node hash: chandra | type: 3
+	node hash: curiosity | type: 2
+
+======================== Libera memoria =======================
+
+======================== Fin del test 1a ========================= Ejercicio 1b ==
+
+Agregando constelaciones y misiones:
+
+junta-constelaciones-mision-estrellas:librarigelcruxlibrajunodenebaurigalunadionelunaisspalas
+junta-constelaciones-mision-estrellas:aurigabetelgeusecentaurojunopolluxadharabetelgeusesiriogeminisorioncentaurobetelgeusesiriocefeosagitariocisneganimedesoberontitaniaeris
+junta-constelaciones-mision-estrellas:solcisnepavocefeopavopisiscefeosagitariopavocruxrheaencéladovesta
+junta-constelaciones-mision-estrellas:cruxpolluxaurigaaurigasagitariohubblelibraaurigacisnelibralunatitanmimastitánapollo 11cassini-huygensceresirisjunohebe
+junta-constelaciones-mision-estrellas:pavodenebadharaorionsolprocyonlibracisnepavocisneorioncentaurogeminissolpolarisrigelpavoarielhubblejunochandrayaan-2victoria
+junta-constelaciones-mision-estrellas:geminispisiscefeopolarishubblehubblepolluxcruxcalistotritónmirandaartemispallas
+junta-constelaciones-mision-estrellas:sagitariorigelsiriodenebachenarpisissagitariopavojunoadharasoyuzhygiea
+junta-constelaciones-mision-estrellas:pavopolarisaltaircefeopavocruxpavoioeuropaumbrielgalemede
+======================== Fin del test 1b =======================

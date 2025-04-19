@@ -1,0 +1,21 @@
+Starting program: /mnt/c/Users/valen/Documents/Repositorios/TP_ACSO/TP2-x86_64/ej2/bomb 
+Bienvenidos a la bomba. Tienen 4 etapas para inmolarse.
+Que tengan un buen dia!
+.
+
+Breakpoint 1, 0x0000000000401de7 in phase_1 ()
+(gdb) s
+Single stepping until exit from function phase_1,
+which has no line number information.
+
+Breakpoint 2, 0x0000000000401def in phase_1 ()
+(gdb) s
+Single stepping until exit from function phase_1,
+which has no line number information.
+
+Breakpoint 3, 0x000000000040231e in strings_not_equal ()
+(gdb) info args
+No symbol table info available.
+(gdb) x/s $rsi
+0x4c9a60:       "Cada uno es como Dios le hizo, y aun peor muchas veces."
+(gdb)

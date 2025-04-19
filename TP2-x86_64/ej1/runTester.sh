@@ -18,6 +18,9 @@ ERRORDIFF=0
 
 ./tester
 
+dos2unix salida.caso.propio.ej1.txt 2>~/diff1
+
+
 $DIFFER salida.caso.propio.ej1.txt salida.catedra.ej1.txt > /tmp/diff1
 if [ $? -ne 0 ]; then
   echo "  **Discrepancia en el ejercicio 1"
@@ -41,4 +44,3 @@ if [ $? -ne 0 ]; then
   echo "  **Error de memoria"
   exit 1
 fi
-

@@ -1,0 +1,26 @@
+(gdb) run
+Starting program: /mnt/c/Users/valen/Documents/Repositorios/TP_ACSO/TP2-x86_64/ej2/bomb 
+Bienvenidos a la bomba. Tienen 4 etapas para inmolarse.
+Que tengan un buen dia!
+Cada uno es como Dios le hizo, y aun peor muchas veces.
+Etapa 1 desactivada. Aver subimos la apuesta en la proxima
+-1000 3079
+
+Breakpoint 4, 0x0000000000401e50 in phase_2 ()
+(gdb) s
+Single stepping until exit from function phase_2,
+which has no line number information.
+
+Breakpoint 5, 0x0000000000401e0b in misterio ()
+(gdb) s
+Single stepping until exit from function misterio,
+which has no line number information.
+0x0000000000401ea1 in phase_2 ()
+(gdb) s
+Single stepping until exit from function phase_2,
+which has no line number information.
+0x0000000000401d47 in main ()
+(gdb) s
+Single stepping until exit from function main,
+which has no line number information.
+Diablos, pense que esa los iba a agarrar. Mitad de la bomba hecha ...

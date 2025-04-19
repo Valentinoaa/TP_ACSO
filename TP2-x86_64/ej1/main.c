@@ -9,7 +9,7 @@
 *	crea y destruye a una lista vacía
 */
 void test_create_destroy_list(){
-	string_proc_list * list	= string_proc_list_create_asm();
+	string_proc_list * list	= string_proc_list_create_asm(); // _asm
 	string_proc_list_destroy(list);
 }
 
@@ -17,7 +17,7 @@ void test_create_destroy_list(){
 *	crea y destruye un nodo
 */
 void test_create_destroy_node(){
-	string_proc_node* node	= string_proc_node_create_asm(0, "hash");
+	string_proc_node* node	= string_proc_node_create_asm(0, "hash"); // _asm
 	string_proc_node_destroy(node);
 }
 
@@ -26,7 +26,7 @@ void test_create_destroy_node(){
 */
 void test_create_list_add_nodes()
 {	
-	string_proc_list * list	= string_proc_list_create_asm();
+	string_proc_list * list	= string_proc_list_create_asm(); //_asm
 	string_proc_list_add_node_asm(list, 0, "hola");
 	string_proc_list_add_node_asm(list, 0, "a");
 	string_proc_list_add_node_asm(list, 0, "todos!");
