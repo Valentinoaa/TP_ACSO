@@ -8,6 +8,7 @@
 
 #define DIR_MAX_LEN 14
 
+int path_resolve(struct unixfilesystem *fs, int parent_inode, const char* subpath);
 
 int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
 	if (strcmp(pathname, "/") == 0) {
