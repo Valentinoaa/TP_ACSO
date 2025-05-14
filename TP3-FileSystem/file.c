@@ -9,24 +9,26 @@
 
 
 int file_getblock(struct unixfilesystem *fs, int inumber, int blockNum, void *buf) {
-	// get inode content
 	struct inode my_inode;
 	int err = inode_iget(fs, inumber, &my_inode);
 	if(err < 0) return -1;
 
-	// get true block num
+	// Verificar que el inodo está asignado
+	if ((my_inode.i_mode & IALLOC) == 0) {
+		return -1;
+	}
+
 	int sector = inode_indexlookup(fs, &my_inode, blockNum);
 	if(sector < 0) return -1;
 
+	// Manejar bloques dispersos (sparse blocks)
 	if(sector == 0) {
 		memset(buf, 0, DISKIMG_SECTOR_SIZE);
 	} else {
-		// get block content
 		int read_err = diskimg_readsector(fs->dfd, sector, buf);
 		if(read_err < 0) return -1;
 	}
 
-	// get bytes and blocks
 	int total_bytes = inode_getsize(&my_inode);
 	if(total_bytes < 0) return -1;
 	int total_blocks = total_bytes / DISKIMG_SECTOR_SIZE;

@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include <getopt.h>
+#include <unistd.h>  /* For getopt() and optind */
 
 #include "diskimg.h"
 #include "unixfilesystem.h"
