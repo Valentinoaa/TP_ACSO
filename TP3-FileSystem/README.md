@@ -32,7 +32,7 @@ en el direcetorio **sample/testdisks**, hay tres discos de prueba: basicDiskImag
   
 La salida esperada de ejecutar *diskimageaccess* en cada imagen de disco X se almacena en el archivo **X.gold** dentro del directorio **/samples/testdisks** y tiene que coincidar con su salida. Esto genera un output en la salida estándar, ustedes la pueden redirigir a un archivo haciendo lo siguiente:
 
-     ./diskimageaccess -ip /samples/testdisks/basicDiskImage > output_basic.txt
+     ./diskimageaccess -ip ./samples/testdisks/basicDiskImage > output_basic.txt
 
 En el caso de que no puedan puedan ejecutar **diskimageaccess_soln_x8**. Pueden comparar su salida (**output_basic.txt**) con la de la cátedra que son los archivos que tienen extensión **.gold** que se encuentran en **/samples/testdisks**. La idea es que la salida de ejecutar el comando:
 
