@@ -15,6 +15,8 @@
 #include <thread>      // for thread
 #include <vector>      // for vector
 #include "Semaphore.h" // for Semaphore
+#include <queue>       
+#include <memory>       
 
 using namespace std;
 
@@ -34,6 +36,9 @@ typedef struct worker {
     /**
      * Complete the definition of the worker_t struct here...
      **/
+    bool available;
+    bool hasWork;
+    unique_ptr<Semaphore> workReady;
 } worker_t;
 
 class ThreadPool {
@@ -74,6 +79,10 @@ class ThreadPool {
     vector<worker_t> wts;                   // worker thread handles. you may want to change/remove this
     bool done;                              // flag to indicate the pool is being destroyed
     mutex queueLock;                        // mutex to protect the queue of tasks
+    queue<function<void(void)>> tasks;      
+    Semaphore pendingTasks;                 
+    mutex workerLock;                       
+    Semaphore allWorkersAvailable;          
 
     /* It is incomplete, there should be more private variables to manage the structures... 
     * *
